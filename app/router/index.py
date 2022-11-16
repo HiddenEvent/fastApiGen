@@ -12,9 +12,9 @@ router = APIRouter()
 
 @router.get("/")
 async def index(session: Session = Depends(db.session)):
-    # user = Users(status='active')
-    # session.add(user)
-    # session.commit()
+    user = Users(status='active', name="HelloWorld")
+    session.add(user)
+    session.commit()
 
     Users().create(session, auto_commit=True, name="코알라")
 
