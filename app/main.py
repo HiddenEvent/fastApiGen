@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from app.database.conn import db
 
 from app.common.config import conf
-from app.router import index
+from app.router import index, auth
 from app.database import schema
 
 def create_app():
@@ -27,7 +27,7 @@ def create_app():
 
     # 라우터 정의
     app.include_router(index.router)
-
+    app.include_router(auth.router, tags=["인증"], prefix="/auth")
 
     return app
 
@@ -37,32 +37,3 @@ app = create_app()
 if __name__ == '__main__':
     uvicorn.run("main:app", host="localhost", port=8000, reload=True)
     # uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=conf().PROJ_RELOAD)
-
-
-
-
-
-# from fastapi.responses import FileResponse
-# @app.get("/")
-# async def root():
-#     return FileResponse('../index.html')
-#
-#
-# @app.get("/hello/{name}")
-# async def say_hello(name: str):
-#     return {"message": f"Hello {name}"}
-#
-# @app.get("/data")
-# async def data():
-#     return {'hello':1234}
-#
-# from pydantic import BaseModel
-# class SendRequest(BaseModel):
-#     name: str
-#     phone: int
-#
-#
-# @app.post("/send")
-# async def send(data: SendRequest):
-#     print(data)
-#     return '전송완료'
