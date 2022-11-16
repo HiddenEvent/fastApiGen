@@ -16,7 +16,7 @@ class Config:
 @dataclass
 class LocalConfig(Config):
     PROJ_RELOAD: bool = True
-    DB_URL: str = "mysql+pymysql://richardkim@localhost/notification_api?charset=utf8mb4"
+    DB_URL: str = "mysql+pymysql://richardkim:flckemzla1!@localhost/notification_api?charset=utf8mb4"
 
 @dataclass
 class ProdConfig(Config):
