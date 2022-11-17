@@ -84,4 +84,3 @@ class Users(Base, BaseMixin):
     phone_number = Column(String(length=20), nullable=True, unique=True)
     profile_img = Column(String(length=1000), nullable=True)
     sns_type = Column(Enum("FB", "G", "K"), nullable=True)
-created_user_key = Column()

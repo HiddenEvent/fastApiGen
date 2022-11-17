@@ -4,8 +4,7 @@ from fastapi import FastAPI
 from app.database.conn import db
 
 from app.common.config import conf
-from app.router import index, auth
-from app.database import schema
+from app.router import index, auth, files
 
 def create_app():
     """
@@ -28,6 +27,7 @@ def create_app():
     # 라우터 정의
     app.include_router(index.router)
     app.include_router(auth.router, tags=["인증"], prefix="/auth")
+    app.include_router(files.router, tags=["파일"], prefix="/file")
 
     return app
 
