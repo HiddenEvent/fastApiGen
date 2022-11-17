@@ -8,11 +8,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from app import models
 from app.common.consts import JWT_SECRET, JWT_ALGORITHM
 from app.database.conn import db
 from app.database.schema import Users
-from app.models import SnsType, Token, UserToken
+from app.models import SnsType, Token, UserToken, UserRegister
 
 """
 1. 구글 로그인을 위한 구글 앱 준비 (구글 개발자 도구)
@@ -34,7 +33,7 @@ router = APIRouter()
 
 
 @router.post("/register/{sns_type}", name="회원가입", status_code=200, response_model=Token)
-async def register(sns_type: SnsType, reg_info: models.UserRegister, session: Session = Depends(db.session)):
+async def register(sns_type: SnsType, reg_info: UserRegister, session: Session = Depends(db.session)):
     """
     :param sns_type:
     :param reg_info:
@@ -43,7 +42,7 @@ async def register(sns_type: SnsType, reg_info: models.UserRegister, session: Se
     """
     if sns_type == SnsType.email:
         is_exist = await is_email_exist(reg_info.email)
-        if not reg_info.email or reg_info.pw:
+        if not reg_info.email or not reg_info.pw:
             return JSONResponse(status_code=400, content=dict(msg="Email and PW must be provided'"))
         if is_exist:
             return JSONResponse(status_code=400, content=dict(msg="EMAIL_EXISTS"))
@@ -55,7 +54,7 @@ async def register(sns_type: SnsType, reg_info: models.UserRegister, session: Se
 
 
 @router.post("/login/{sns_type}", status_code=200)
-async def login(sns_type: SnsType, user_info: models.UserRegister):
+async def login(sns_type: SnsType, user_info: UserRegister):
     ...
 
 

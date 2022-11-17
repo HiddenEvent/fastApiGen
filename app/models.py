@@ -1,7 +1,12 @@
 from enum import Enum
-
 from pydantic.main import BaseModel
 from pydantic.networks import EmailStr
+
+"""
+DB 모델이 아닌 Validation 체크용 모듈이다.
+request, response 
+모든 데이터를 객체화 시켜서 사용할 수 있도록 만든 model
+"""
 
 
 class UserRegister(BaseModel):

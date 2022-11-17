@@ -9,7 +9,7 @@ from sqlalchemy import (
     Enum, Boolean,
 )
 from sqlalchemy.orm import Session
-from app.database.conn import Base
+from app.database.conn import Base, db
 
 
 # from app.database.sqlalchemist import SQLAlchemist
@@ -51,6 +51,27 @@ class BaseMixin:
             session.commit()
         return obj
 
+    @classmethod
+    def get(cls, session: Session = None, **kwargs):
+        """
+        Simply get a Row
+        :param session:
+        :param kwargs:
+        :return:
+        """
+        sess = next(db.session()) if not session else session
+        query = sess.query(cls)
+        for key, val in kwargs.items():
+            col = getattr(cls, key)
+            query = query.filter(col == val)
+
+        if query.count() > 1:
+            raise Exception("Only one row is supposed to be returned, but got more than one.")
+        result = query.first()
+        if not session:
+            sess.close()
+        return result
+
 
 # 상속1 : Base = 기본 속성
 # 상속2 : BaseMixin
@@ -63,3 +84,4 @@ class Users(Base, BaseMixin):
     phone_number = Column(String(length=20), nullable=True, unique=True)
     profile_img = Column(String(length=1000), nullable=True)
     sns_type = Column(Enum("FB", "G", "K"), nullable=True)
+created_user_key = Column()
